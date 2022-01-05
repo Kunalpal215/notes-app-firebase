@@ -4,16 +4,18 @@ class EditNote extends StatefulWidget {
   String enteredNote;
   String enteredSubject;
   String docId;
-  EditNote({required this.enteredNote,required this.enteredSubject,required this.docId});
+  String userUID;
+  EditNote({required this.enteredNote,required this.enteredSubject,required this.docId,required this.userUID});
   @override
-  _EditNoteState createState() => _EditNoteState(enteredNote: enteredNote,enteredSubject: enteredSubject,docId: docId);
+  _EditNoteState createState() => _EditNoteState(enteredNote: enteredNote,enteredSubject: enteredSubject,docId: docId,userUID: userUID);
 }
 
 class _EditNoteState extends State<EditNote> {
   String enteredNote;
   String enteredSubject;
   String docId;
-  _EditNoteState({required this.enteredNote,required this.enteredSubject,required this.docId});
+  String userUID;
+  _EditNoteState({required this.enteredNote,required this.enteredSubject,required this.docId,required this.userUID});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +40,7 @@ class _EditNoteState extends State<EditNote> {
             ElevatedButton(
               child: Text('ADD to notes'),
               onPressed: () async {
-                print(docId);
-                await FirebaseFirestore.instance.collection('notes').doc(docId).update({"subject":enteredSubject,"note":enteredNote});
+                await FirebaseFirestore.instance.collection('notes').doc(userUID).collection('user_notes').doc(docId).update({"subject":enteredSubject,"note":enteredNote});
                 Navigator.pop(context);
               },
             )

@@ -3,15 +3,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({Key? key}) : super(key: key);
-
+  String userUID;
+  AddScreen({required this.userUID});
   @override
-  _AddScreenState createState() => _AddScreenState();
+  _AddScreenState createState() => _AddScreenState(userUID: userUID);
 }
 
 class _AddScreenState extends State<AddScreen> {
   String enteredSubject = "";
   String enteredNote = "";
+  String userUID;
+  _AddScreenState({required this.userUID});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,7 @@ class _AddScreenState extends State<AddScreen> {
             ElevatedButton(
               child: Text('ADD to notes'),
               onPressed: (){
-                FirebaseFirestore.instance.collection('notes').add({"subject" : enteredSubject,"note": enteredNote,"timestamp":DateTime.now().microsecondsSinceEpoch});
+                FirebaseFirestore.instance.collection('notes').doc(userUID).collection('user_notes').add({"subject":enteredSubject,"note":enteredNote,"timestamp":DateTime.now().microsecondsSinceEpoch});
                 Navigator.pop(context);
               },
             )
